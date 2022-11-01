@@ -1,27 +1,37 @@
-go_bericht = open("goedkeuring.txt", "a")
-bericht = open("review.txt", "r")
-afgekeurd = open("afgekeurd.txt", 'a')
+import psycopg2 as db
+
+conn = db.connect(
+    host = 'localhost',
+    user = 'postgres',
+    database = 'nszuil',
+    password = 'admin'
+)
+
+point = conn.cursor()
 
 
-for lines in bericht.readlines():
 
-    go_bericht = open("goedkeuring.txt", 'a')
-    bericht = open("review.txt", 'r')
-    afgekeurd = open("afgekeurd.txt", 'a')
+mod_name = str(input('Voer u naam in: '))
+
+bestand = open("opmerkingen.csv", "r")
+
+
+for lines in bestand.readlines():
+    lines = lines.strip('\n')
     print(lines)
-    opmerking = input("wilt u het bericht goedkeuren?")
+    lines = lines.split(',')
 
-    if opmerking == 'ja' or opmerking == 'Ja' or opmerking == 'JA':
-        print("oke het bericht is goedgekeurd")
-        go_bericht.write(lines)
-        bericht = open("review.txt", 'w')
-
+    opmerking = input("wilt u het bericht goedkeuren? ")
+    if opmerking in ['ja', "JA", 'Ja', 'jA']:
+        keur = 'TRUE'
     else:
-        afgekeurd = open("afgekeurd.txt", 'a')
-        afgekeurd.write(lines)
+        keur = "FALSE"
 
-        print('bericht is afgekeurd en verwijderd.')
 
-go_bericht.close()
-bericht.close()
-afgekeurd.close()
+
+    point.execute(f"INSERT INTO opmerkingen(naam, bericht, datetime, station, mod_naam, keuring) VALUES ('{lines[0]}', '{lines[1]}', '{lines[2]}', '{lines[3]}', '{mod_name}', {keur});")
+
+    conn.commit()
+
+point.close()
+bestand.close()
