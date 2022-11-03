@@ -1,18 +1,11 @@
-#tkinter scherm importeren
+"""alle modules die nodig zijn importeren"""
 from tkinter import *
 root = Tk()
-
-#DB zuil inporteren voor zo nodig....
+root['bg'] = 'yellow'
 import psycopg2 as db
+from weer import rek_api, rek_icon
 
-#rek_api functie aanroepen
-from weer import rek_api
-
-#for de foto's
-from PIL import ImageTk, Image
-
-
-#connectie met de database
+"""connectie met de database"""
 conn = db.connect(
     host = 'localhost',
     user = 'postgres',
@@ -20,48 +13,56 @@ conn = db.connect(
     password = 'admin'
 )
 
-#cursur voor de database
+'''cursur voor de database'''
 cur = conn.cursor()
 
-#selectie van de laatste 5 berichten in de database
-tekst = cur.execute(f'SELECT * FROM opmerkingen WHERE keuring = TRUE order by ID DESC LIMIT 3;')
+'''selectie van de laatste 5 berichten in de database'''
+tekst = cur.execute(f'SELECT * FROM opmerkingen '
+                    f'WHERE keuring = TRUE '
+                    f'ORDER BY id DESC LIMIT 5;')
 rij = cur.fetchall()
 
+'''sluiten van de database'''
 conn.commit()
 cur.close()
 
-#een for loop voor de laatste 5 berichten met tkinter erin
 for r in rij:
-    print(r)
-    info = (f'de heer {r[1]} zei: {r[2]}. in de plaats {r[3]}')
-    label = Label(master=root,
+    info = (f'{r[1]} schreef: "{r[2]}" op het station in {r[3]}')
+    label = Label(root,
                   text=info,
-                  background='yellow',
+                  bg = 'yellow',
                   foreground='blue',
-                  font=('Arial', 30, 'bold italic'),
-                  width=80,
-                  height=3
+                  font=('Arial', 20, 'bold italic'),
+                  width=70,
+                  height=1
                   )
+    label.pack(ipady=20, ipadx=20)
 
-    label.pack()
+"""hier importeer ik de png bestanden in de tkinter scherm"""
 
-#hier probeer ik een foto te importeren in tkinter
-my_img = ImageTk.PhotoImage(Image(open('')))
-my_label = label(image=my_img)
+my_img = PhotoImage(file=f'img_ovfiets.png')
+my_label = Label(root, image=my_img)
 my_label.pack()
+#
+# my_img2 = PhotoImage(file='img_lift.png')
+# my_label2 = Label(root, image=my_img2)
+# my_label2.grid(row=1, column=0)
+#
+# my_img3 = PhotoImage(file='img_toilet.png')
+# my_label3 = Label(root, image=my_img3)
+# my_label3.grid(row=2, column=0)
 
-
-#de celcius aanroepen in tkinter
+"""de celcius aanroepen op het scherm"""
 test = Label(root,
-                text=rek_api(),
+                text=f'{rek_api()}\t {rek_icon()}.png',
                 bg = 'yellow',
                 fg='black',
                 width=80,
                 font=('Arial', 30, 'bold italic'),
                 height=10
                 )
-test.pack(ipadx=6, ipady=12)
+test.pack()
 
-#eindigen van tkinter.
+"""eindigen van de container"""
 root.mainloop()
 
