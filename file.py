@@ -31,3 +31,33 @@
 #               )
 #
 # label.pack()
+
+
+
+
+import psycopg2 as db
+
+conn = db.connect(
+    host = 'localhost',
+    user = 'postgres',
+    database = 'nszuil',
+    password = 'admin'
+)
+
+
+cur = conn.cursor()
+
+info = cur.execute(f'SELECT * FROM station_service '
+                    f'WHERE ov_bike = TRUE '
+                   f'AND elevator = TRUE '
+                   f'AND toilet = TRUE '
+                   f'AND park_and_ride = TRUE'
+                   f';')
+rij = cur.fetchall()
+
+for r in rij:
+    print()
+
+print(rij)
+conn.commit()
+cur.close()

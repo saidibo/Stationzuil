@@ -4,6 +4,8 @@ root = Tk()
 root['bg'] = 'yellow'
 import psycopg2 as db
 from weer import rek_api, rek_icon
+from PIL import ImageTk, Image
+#resize
 
 """connectie met de database"""
 conn = db.connect(
@@ -17,10 +19,12 @@ conn = db.connect(
 cur = conn.cursor()
 
 '''selectie van de laatste 5 berichten in de database'''
-tekst = cur.execute(f'SELECT * FROM opmerkingen '
+cur.execute(f'SELECT * FROM opmerkingen '
                     f'WHERE keuring = TRUE '
                     f'ORDER BY id DESC LIMIT 5;')
 rij = cur.fetchall()
+
+
 
 '''sluiten van de database'''
 conn.commit()
@@ -32,13 +36,16 @@ for r in rij:
                   text=info,
                   bg = 'yellow',
                   foreground='blue',
-                  font=('Arial', 20, 'bold italic'),
+                  font=('Arial', 15, 'bold italic'),
                   width=70,
                   height=1
                   )
     label.pack(ipady=20, ipadx=20)
 
 """hier importeer ik de png bestanden in de tkinter scherm"""
+
+
+
 
 my_img = PhotoImage(file=f'img_ovfiets.png')
 my_label = Label(root, image=my_img)
@@ -51,15 +58,17 @@ my_label.pack()
 # my_img3 = PhotoImage(file='img_toilet.png')
 # my_label3 = Label(root, image=my_img3)
 # my_label3.grid(row=2, column=0)
-
+vb_image = PhotoImage(file=f'weer_icon/{rek_icon()}@2x.png')
 """de celcius aanroepen op het scherm"""
 test = Label(root,
-                text=f'{rek_api()}\t {rek_icon()}.png',
-                bg = 'yellow',
+                text= f'{rek_api()}',
+                bg = '#89CFF0',
                 fg='black',
-                width=80,
+                width=200,
                 font=('Arial', 30, 'bold italic'),
-                height=10
+                height=190,
+                image= vb_image,
+                compound= 'bottom'
                 )
 test.pack()
 

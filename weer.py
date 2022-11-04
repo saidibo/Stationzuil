@@ -20,3 +20,4 @@ def rek_icon():
 
 if __name__ == "__main__":
     rek_api()
+    print(rek_icon())
