@@ -1,8 +1,8 @@
 import requests
-
+import gs
 # import request
 def rek_api():
-    resource_uri = "https://api.openweathermap.org/data/2.5/weather?q=amsterdam&appid=623674843eb5b413c214a36bad8eefdc"
+    resource_uri = f"https://api.openweathermap.org/data/2.5/weather?q=amsterdam&appid=28d6e5af678b6c23a3752ff387b58633"
     response = requests.get(resource_uri)
     response_data = response.json()
     weer = response_data['main']
@@ -10,14 +10,9 @@ def rek_api():
     return str(celcius) + '°C'
 
 def rek_icon():
-    resource_uri = "https://api.openweathermap.org/data/2.5/weather?q=amsterdam&appid=623674843eb5b413c214a36bad8eefdc"
+    resource_uri = f"https://api.openweathermap.org/data/2.5/weather?q=amsterdam&appid=28d6e5af678b6c23a3752ff387b58633"
     response = requests.get(resource_uri)
     response_data = response.json()
     weer = ((response_data['weather'])[0])
     return weer['icon']
 
-
-
-if __name__ == "__main__":
-    rek_api()
-    print(rek_icon())
