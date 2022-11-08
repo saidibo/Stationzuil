@@ -5,21 +5,21 @@ importeren van de modules
 """
 
 """
-hier haal ik de datum en tijd op,
-hier staat ook de lijst van de 3 steden met random.choice
+hier haal ik de datum en tijd op
 """
 today = datetime.now()
 date_time = today.strftime("%m/%d/%Y %H:%M:%S")
-station_lijst = ['Amsterdam', 'Utrecht', 'Rotterdam']
-keuzestation = list(random.choices(station_lijst, k=3))
+
 
 
 
 """"
-een while loop zodat klanten hun gegevens en review kunnen invullen
+een while loop zodat klanten hun gegevens en review kunnen invullen,
+hier staat ook de lijst van de 3 steden met random.choice
 """
 while True:
-
+    station_lijst = ['Amsterdam', 'Utrecht', 'Rotterdam']
+    keuzestation = list(random.choices(station_lijst, k=3))
     msg = str(input("Beste klant, wat is u ervaring: "))
     msg_naam = str(input("Wat is u naam? "))
     if msg_naam == "":
