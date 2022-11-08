@@ -91,7 +91,6 @@ for r in row:
     rij += 1
     cur.execute(f"SELECT * FROM station_service WHERE station_city = '{r[3]}';")
     voorziening = cur.fetchall()
-    print(voorziening)
     voorziening = voorziening[0]
     station_city, country, ov_bike, elevator, toilet, park_and_ride = voorziening
 
